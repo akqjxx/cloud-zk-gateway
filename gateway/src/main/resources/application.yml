@@ -1,0 +1,29 @@
+server:
+  port: 1080
+spring:
+  cloud:
+    zookeeper:
+      connect-string: 192.168.2.100:2181
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: cust01
+          uri: lb://cust01
+          predicates:
+            - Path=/api/c1/**
+          filters:
+            - StripPrefix=2
+        - id: cust02
+          uri: lb://cust02
+          predicates:
+            - Path=/api/c2/**
+          filters:
+            - StripPrefix=2
+  application:
+    name: gateway
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
